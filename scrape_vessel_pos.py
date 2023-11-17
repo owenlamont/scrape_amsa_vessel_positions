@@ -12,17 +12,23 @@ import typer
 
 def find_and_parse_date(text: str) -> datetime | None:
     # Regular expression for the date pattern "%B_%Y"
-    date_pattern = r"(January|February|March|April|May|June|July|August|September|October|November|December)_\d{4}"
-
-    # Search for the pattern in the text
-    match = re.search(date_pattern, text)
-
+    month_year_pattern = (
+        r"(January|February|March|April|May|June|July|August|September|October|November|December)_\d{4}"
+    )
+    match = re.search(month_year_pattern, text)
     if match:
         date_str = match.group()
         date_obj = datetime.strptime(date_str, "%B_%Y")
         return date_obj
-    else:
-        return None
+
+    year_pattern = r"_\d{4}"
+    match = re.search(year_pattern, text)
+    if match:
+        date_str = match.group()
+        date_obj = datetime.strptime(date_str, "_%Y")
+        return date_obj
+
+    return None
 
 
 def main(
